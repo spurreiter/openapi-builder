@@ -17,9 +17,9 @@ Order:
       type: string
       description: Order Status
       enum:
-      - placed
-      - approved
-      - delivered
+        - placed
+        - approved
+        - delivered
     complete:
       type: boolean
       default: false
