@@ -1,0 +1,9 @@
+OrderResponse:
+  description: successful operation
+  content:
+    application/xml:
+      schema:
+        $ref: '#/components/schemas/Order'
+    application/json:
+      schema:
+        $ref: '#/components/schemas/Order'

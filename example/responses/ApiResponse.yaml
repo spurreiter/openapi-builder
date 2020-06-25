@@ -1,0 +1,14 @@
+ApiResponse:
+  description: successful operation
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          code:
+            type: integer
+            format: int32
+          type:
+            type: string
+          message:
+            type: string

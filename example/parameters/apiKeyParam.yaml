@@ -1,0 +1,5 @@
+apiKeyParam:
+  name: api_key
+  in: header
+  schema:
+    type: string

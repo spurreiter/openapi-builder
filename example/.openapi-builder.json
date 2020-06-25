@@ -1,0 +1,8 @@
+{
+  "dirname": ".",
+  "mainfile": "main.yaml",
+  "outfile": "petstore.yaml",
+  "mixinDirnames": [
+    "mixins"
+  ]
+}

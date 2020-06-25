@@ -1,0 +1,13 @@
+PetResponse:
+  description: successful operation
+  content:
+    application/xml:
+      schema:
+        type: array
+        items:
+          $ref: '#/components/schemas/Pet'
+    application/json:
+      schema:
+        type: array
+        items:
+          $ref: '#/components/schemas/Pet'

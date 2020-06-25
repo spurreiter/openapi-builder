@@ -1,0 +1,10 @@
+/user/logout:
+  get:
+    tags:
+      - user
+    summary: Logs out current logged in user session
+    operationId: logoutUser
+    responses:
+      default:
+        description: successful operation
+        content: {}

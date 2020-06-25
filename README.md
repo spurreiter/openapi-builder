@@ -40,3 +40,5 @@ openapi-builder
 ## License
 
 Source code is [MIT](./LICENSE) licensed
+
+The example uses the well known swagger [petstore](https://editor.swagger.io) which is licensed under Apache 2.0

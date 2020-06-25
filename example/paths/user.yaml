@@ -1,0 +1,19 @@
+/user:
+  post:
+    tags:
+      - user
+    summary: Create user
+    description: This can only be done by the logged in user.
+    operationId: createUser
+    requestBody:
+      description: Created user object
+      content:
+        '*/*':
+          schema:
+            $ref: '#/components/schemas/User'
+      required: true
+    responses:
+      default:
+        description: successful operation
+        content: {}
+    x-codegen-request-body-name: body

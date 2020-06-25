@@ -1,0 +1,62 @@
+/user/{username}:
+  get:
+    tags:
+      - user
+    summary: Get user by user name
+    operationId: getUserByName
+    parameters:
+      - $ref: '#/components/parameters/usernamePathParam'
+    responses:
+      200:
+        description: successful operation
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      400:
+        description: Invalid username supplied
+        content: {}
+      404:
+        description: User not found
+        content: {}
+  put:
+    tags:
+      - user
+    summary: Updated user
+    description: This can only be done by the logged in user.
+    operationId: updateUser
+    parameters:
+      - $ref: '#/components/parameters/usernamePathParam'
+    requestBody:
+      description: Updated user object
+      content:
+        '*/*':
+          schema:
+            $ref: '#/components/schemas/User'
+      required: true
+    responses:
+      400:
+        description: Invalid user supplied
+        content: {}
+      404:
+        description: User not found
+        content: {}
+    x-codegen-request-body-name: body
+  delete:
+    tags:
+      - user
+    summary: Delete user
+    description: This can only be done by the logged in user.
+    operationId: deleteUser
+    parameters:
+      - $ref: '#/components/parameters/usernamePathParam'
+    responses:
+      400:
+        description: Invalid username supplied
+        content: {}
+      404:
+        description: User not found
+        content: {}

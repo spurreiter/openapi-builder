@@ -1,0 +1,20 @@
+/store/order:
+  post:
+    tags:
+      - store
+    summary: Place an order for a pet
+    operationId: placeOrder
+    requestBody:
+      description: order placed for purchasing the pet
+      content:
+        '*/*':
+          schema:
+            $ref: '#/components/schemas/Order'
+      required: true
+    responses:
+      200:
+        $ref: '#/components/responses/OrderResponse'
+      400:
+        description: Invalid Order
+        content: {}
+    x-codegen-request-body-name: body

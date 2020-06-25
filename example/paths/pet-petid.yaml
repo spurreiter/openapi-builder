@@ -1,0 +1,71 @@
+/pet/{petId}:
+  get:
+    tags:
+      - pet
+    summary: Find pet by ID
+    description: Returns a single pet
+    operationId: getPetById
+    parameters:
+      - $ref: '#/components/parameters/petIdParam'
+    responses:
+      200:
+        description: successful operation
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Pet'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pet'
+      400:
+        description: Invalid ID supplied
+        content: {}
+      404:
+        description: Pet not found
+        content: {}
+    security:
+      - $mixin: securityApiKey
+
+  post:
+    tags:
+      - pet
+    summary: Updates a pet in the store with form data
+    operationId: updatePetWithForm
+    parameters:
+      - $ref: '#/components/parameters/petIdParam'
+    requestBody:
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            properties:
+              name:
+                type: string
+                description: Updated name of the pet
+              status:
+                type: string
+                description: Updated status of the pet
+    responses:
+      405:
+        description: Invalid input
+        content: {}
+    security:
+      - $mixin: securityPetstoreAuth
+
+
+  delete:
+    tags:
+      - pet
+    summary: Deletes a pet
+    operationId: deletePet
+    parameters:
+      - $ref: '#/components/parameters/apiKeyParam'
+      - $ref: '#/components/parameters/petIdParam'
+    responses:
+      400:
+        description: Invalid ID supplied
+        content: {}
+      404:
+        description: Pet not found
+        content: {}
+    security:
+      - $mixin: securityPetstoreAuth

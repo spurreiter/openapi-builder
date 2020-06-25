@@ -1,0 +1,7 @@
+usernamePathParam:
+  name: username
+  in: path
+  description: username
+  required: true
+  schema:
+    type: string

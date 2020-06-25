@@ -1,0 +1,19 @@
+/pet/findByTags:
+  get:
+    tags:
+    - pet
+    summary: Finds Pets by tags
+    description: Muliple tags can be provided with comma separated strings. Use         tag1,
+      tag2, tag3 for testing.
+    operationId: findPetsByTags
+    parameters:
+      - $ref: '#/components/parameters/tagsParam'
+    responses:
+      200:
+        $ref: '#/components/responses/PetResponse'
+      400:
+        description: Invalid tag value
+        content: {}
+    deprecated: true
+    security:
+      - $mixin: securityPetstoreAuth

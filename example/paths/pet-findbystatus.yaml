@@ -1,0 +1,17 @@
+/pet/findByStatus:
+  get:
+    tags:
+    - pet
+    summary: Finds Pets by status
+    description: Multiple status values can be provided with comma separated strings
+    operationId: findPetsByStatus
+    parameters:
+      - $ref: '#/components/parameters/statusParam'
+    responses:
+      200:
+        $ref: '#/components/responses/PetResponse'
+      400:
+        description: Invalid status value
+        content: {}
+    security:
+      - $mixin: securityPetstoreAuth
