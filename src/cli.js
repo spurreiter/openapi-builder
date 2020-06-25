@@ -23,16 +23,18 @@ const saveJson = (filename, data, isForce) => {
 }
 
 const toConfigfile = filename => {
-  const stat = fs.statSync(filename)
-  const dirname = stat.isDirectory()
-    ? path.dirname(filename)
-    : filename
+  try {
+    const stat = fs.statSync(filename)
+    const dirname = stat.isDirectory()
+      ? filename
+      : path.dirname(filename)
 
-  if (!/\.json$/.test(filename) || stat.isDirectory()) {
-    return path.resolve(dirname, CONFIG_FILE)
-  }
+    if (!/\.json$/.test(filename) || stat.isDirectory()) {
+      return path.resolve(dirname, CONFIG_FILE)
+    }
 
-  return filename
+    return filename
+  } catch (e) {}
 }
 
 const loadConfig = (filename) => {
