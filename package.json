@@ -6,11 +6,23 @@
     "openapi",
     "builder"
   ],
+  "homepage": "https://github.com/spurreiter/openapi-builder#readme",
+  "bugs": {
+    "url": "https://github.com/spurreiter/openapi-builder/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/spurreiter/openapi-builder.git"
+  },
   "license": "MIT",
   "author": "spurreiter",
   "main": "./src/index.js",
   "bin": {
-    "openapi-builder": "./bin/openapi-builder.js"
+    "openapi-builder": "bin/openapi-builder.js"
+  },
+  "directories": {
+    "example": "example",
+    "test": "test"
   },
   "scripts": {
     "build": "node ./bin/openapi-builder.js example",
