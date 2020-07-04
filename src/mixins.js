@@ -2,6 +2,21 @@ const _merge = require('lodash.merge')
 
 const jsonClean = obj => JSON.parse(JSON.stringify(obj))
 
+const isNumber = num => !isNaN(Number(num))
+
+const toNumber = num => isNumber(num) ? Number(num) : num
+
+const RE_TAG = /^\$([a-zA-Z0-9-]+)\$\s*(?:(.*)|)$/
+
+const extractTag = value => {
+  const m = typeof value === 'string' && RE_TAG.exec(value)
+  if (m && m[1]) {
+    m.shift()
+    return m
+  }
+  return []
+}
+
 /**
  * traverse an object or array
  * if object is detected than `fn` is applied
@@ -24,6 +39,51 @@ function traverse (obj, fn) {
 }
 
 /**
+ * mixin function to either apply $default or mixin variables
+ * @param {object} source
+ * @param {object} mixin
+ * @param {string} name
+ * @return {object}
+ */
+function mixinFn (source, mixin, name) {
+  const fn = obj => {
+    const target = {}
+    Object.entries(obj).forEach(([key, value]) => {
+      if (key[0] !== '$') {
+        const [tag, defaultValue] = extractTag(value)
+        if (tag) {
+          value = source[tag] !== undefined
+            ? source[tag]
+            : toNumber(defaultValue)
+        }
+        target[key] = value
+      }
+    })
+    return target
+  }
+
+  return traverse(mixin, fn)
+}
+
+/**
+ * [getMixin description]
+ * @param {object} source
+ * @param {object} mixins
+ * @return {object}
+ */
+function getMixin (source, mixins) {
+  const isObject = typeof source === 'object'
+  const name = isObject
+    ? source.mixin
+    : source
+  if (!mixins[name]) {
+    console.error('missing mixin %s', name)
+  } else {
+    return mixinFn(source, mixins[name], name)
+  }
+}
+
+/**
  * merge source with detected mixins
  * @param  {object} source
  * @param  {object} mixins
@@ -33,22 +93,15 @@ function mergeMixins (source, mixins) {
   const target = {}
 
   if (source.$mixin) {
-    const mixin = source.$mixin
-    if (!mixins[mixin]) {
-      console.error('missing mixin %s', mixin)
-    } else {
-      _merge(target, mixins[mixin])
-    }
+    const m = getMixin(source.$mixin, mixins)
+    _merge(target, m)
     delete source.$mixin
   }
 
   if (source.$mixins) {
     source.$mixins.forEach(mixin => {
-      if (!mixins[mixin]) {
-        console.error('missing mixin %s', mixin)
-      } else {
-        _merge(target, mixins[mixin])
-      }
+      const m = getMixin(mixin, mixins)
+      _merge(target, m)
     })
     delete source.$mixins
   }
@@ -128,6 +181,8 @@ function applyMixins (source, { mixins = [], useExtra } = {}) {
 
 module.exports = {
   traverse,
+  extractTag,
   mergeMixins,
-  applyMixins
+  applyMixins,
+  mixinFn
 }

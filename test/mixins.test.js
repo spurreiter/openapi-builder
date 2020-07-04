@@ -1,7 +1,42 @@
 const assert = require('assert')
-const { traverse, mergeMixins, applyMixins } = require('../src/mixins.js')
+const { traverse, mergeMixins, applyMixins, mixinFn } = require('../src/mixins.js')
 
 describe('utils', function () {
+  describe('mixinFn', function () {
+    const mixin = {
+      description: '$description$ Invalid Value',
+      nested: {
+        number: '$number$ 400'
+      }
+    }
+
+    it('should use defaults', function () {
+      const source = '400'
+      const r = mixinFn(source, mixin)
+      assert.deepStrictEqual(r, {
+        description: 'Invalid Value',
+        nested: {
+          number: 400
+        }
+      })
+    })
+
+    it('should apply mixin function', function () {
+      const source = {
+        mixin: 400,
+        description: 'another value',
+        number: 500
+      }
+      const r = mixinFn(source, mixin)
+      assert.deepStrictEqual(r, {
+        description: 'another value',
+        nested: {
+          number: 500
+        }
+      })
+    })
+  })
+
   describe('mergeMixins', function () {
     const mixins = {
       Record: {
@@ -84,6 +119,67 @@ describe('utils', function () {
             }
           }
         }
+      })
+    })
+
+    describe('mixin as object', function () {
+      const mixins = {
+        400: {
+          description: '$description$ Invalid value'
+        }
+      }
+
+      it('shall merge a mixin object with its default values', function () {
+        const source = {
+          responses: {
+            200: { $ref: '#/components/responses/PetResponse' },
+            400: {
+              $mixin: 400
+            }
+          }
+        }
+        const fn = source => mergeMixins(source, mixins)
+        const r = traverse(source, fn)
+
+        // console.log(JSON.stringify(r, null, 2))
+        assert.deepStrictEqual(r, {
+          responses: {
+            200: {
+              $ref: '#/components/responses/PetResponse'
+            },
+            400: {
+              description: 'Invalid value'
+            }
+          }
+        })
+      })
+
+      it('shall merge a mixin object', function () {
+        const source = {
+          responses: {
+            200: { $ref: '#/components/responses/PetResponse' },
+            400: {
+              $mixin: {
+                mixin: 400,
+                description: 'Invalid status value'
+              }
+            }
+          }
+        }
+        const fn = source => mergeMixins(source, mixins)
+        const r = traverse(source, fn)
+
+        // console.log(JSON.stringify(r, null, 2))
+        assert.deepStrictEqual(r, {
+          responses: {
+            200: {
+              $ref: '#/components/responses/PetResponse'
+            },
+            400: {
+              description: 'Invalid status value'
+            }
+          }
+        })
       })
     })
   })
