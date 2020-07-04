@@ -39,5 +39,8 @@
             schema:
               type: string
       400:
-        description: Invalid username/password supplied
-        content: {}
+        $mixin:
+          mixin: ErrorResponse
+          status: 400
+          description: Invalid username/password supplied
+        

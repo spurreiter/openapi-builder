@@ -1,2 +1,4 @@
+# mixins need to be described as an object.
+# arrays are not (yet) possible
 securityApiKey:
   api_key: []

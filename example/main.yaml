@@ -35,14 +35,31 @@ tags:
       description: Find out more about our store
       url: http://swagger.io
 
+# $paths$ acts as a placeholder for all yaml definitions part of the paths folder
 paths: $paths$
 
 components:
 
+  # $schemas$ acts as a placeholder for all yaml definitions part of the schemas folder
   schemas: $schemas$
-
-  parameters: $parameters$
 
   responses: $responses$
 
+  parameters: $parameters$
+
+  # examples: $examples$
+
+  # requestBodies: $requestBodies$
+
+  #  headers: $ headers$
+
   securitySchemes: $securitySchemes$
+
+  # links: $links$
+
+  #  callbacks: $ callbacks$
+
+  # you may use any folder name as placeholder e.g. if you want to define hidden
+  # schemas within a x-schemas folder you can use them as well.
+  # $ref would then point to `#/components/x-schemas/...`
+  # x-schemas: $x-schemas$

@@ -17,11 +17,15 @@
             schema:
               $ref: '#/components/schemas/User'
       400:
-        description: Invalid username supplied
-        content: {}
+        $mixin:
+          mixin: ErrorResponse
+          status: 400
+          description: Invalid username supplied
       404:
-        description: User not found
-        content: {}
+        $mixin:
+          mixin: ErrorResponse
+          status: 404
+          description: User not found
   put:
     tags:
       - user
@@ -39,11 +43,15 @@
       required: true
     responses:
       400:
-        description: Invalid user supplied
-        content: {}
+        $mixin:
+          mixin: ErrorResponse
+          status: 400
+          description: Invalid user supplied
       404:
-        description: User not found
-        content: {}
+        $mixin:
+          mixin: ErrorResponse
+          status: 404
+          description: User not found
     x-codegen-request-body-name: body
   delete:
     tags:
@@ -55,8 +63,12 @@
       - $ref: '#/components/parameters/usernamePathParam'
     responses:
       400:
-        description: Invalid username supplied
-        content: {}
+        $mixin:
+          mixin: ErrorResponse
+          status: 400
+          description: Invalid username supplied
       404:
-        description: User not found
-        content: {}
+        $mixin:
+          mixin: ErrorResponse
+          status: 404
+          description: User not found

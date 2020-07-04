@@ -12,8 +12,10 @@
       200:
         $ref: '#/components/responses/PetResponse'
       400:
-        description: Invalid tag value
-        content: {}
+        $mixin:
+          mixin: ErrorResponse
+          status: 400
+          description: Invalid tag value
     deprecated: true
     security:
       - $mixin: securityPetstoreAuth

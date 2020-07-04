@@ -1,0 +1,27 @@
+# mixins need to be described as an object.
+# simple templating with `$tag$ defaultvalue` is available
+ErrorResponse:
+  description: $description$ Invalid value
+  content:
+    application/xml:
+      schema:
+        type: object
+        properties:
+          status:
+            type: integer
+            format: int32
+            example: $status$ 400
+          message:
+            type: string
+            example: $description$ Invalid value
+    application/json:
+      schema:
+        type: object
+        properties:
+          status:
+            type: integer
+            format: int32
+            example: $status$ 400
+          message:
+            type: string
+            example: $description$ Invalid value

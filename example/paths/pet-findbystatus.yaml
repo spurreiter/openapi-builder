@@ -11,7 +11,11 @@
       200:
         $ref: '#/components/responses/PetResponse'
       400:
-        description: Invalid status value
-        content: {}
+        # This mixin overwrites defined tags in the `ErrorResponse` template
+        $mixin:
+          mixin: ErrorResponse
+          status: 400
+          description: Invalid status value
     security:
+      # This mixin is applied as is
       - $mixin: securityPetstoreAuth
