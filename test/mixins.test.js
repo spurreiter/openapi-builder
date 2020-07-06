@@ -4,11 +4,11 @@ const { traverse, mergeMixins, applyMixins, mixinFn } = require('../src/mixins.j
 describe('utils', function () {
   describe('mixinFn', function () {
     const mixin = {
-      description: '$description$ Invalid Value',
+      description: '$description|Invalid Value$',
       nested: {
-        number: '$number$ 400'
+        number: '$number|400$'
       },
-      array: ['$array0$ one']
+      array: ['$array0|one$']
     }
 
     it('should use defaults', function () {
@@ -129,7 +129,7 @@ describe('utils', function () {
     describe('mixin as object', function () {
       const mixins = {
         400: {
-          description: '$description$ Invalid value'
+          description: '$description|Invalid value$'
         }
       }
 

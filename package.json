@@ -26,7 +26,7 @@
   },
   "scripts": {
     "all": "npm run lint && npm t && npm run build",
-    "build": "node ./bin/openapi-builder.js example",
+    "example": "node ./bin/openapi-builder.js example",
     "lint": "eslint --fix \"**/*.js\"",
     "test": "mocha"
   },

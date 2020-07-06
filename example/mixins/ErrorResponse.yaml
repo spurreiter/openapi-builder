@@ -1,7 +1,7 @@
 # mixins need to be described as an object.
 # simple templating with `$tag$ defaultvalue` is available
 ErrorResponse:
-  description: $description$ Invalid value
+  description: $description|Invalid value$
   headers:
     Cache-Control:
       $ref: '#/components/headers/Cache-Control'
@@ -13,10 +13,10 @@ ErrorResponse:
           status:
             type: integer
             format: int32
-            example: $status$ 400
+            example: $status|400$
           message:
             type: string
-            example: $description$ Invalid value
+            example: $description|Invalid value$
     application/json:
       schema:
         type: object
@@ -24,7 +24,7 @@ ErrorResponse:
           status:
             type: integer
             format: int32
-            example: $status$ 400
+            example: $status|400$
           message:
             type: string
-            example: $description$ Invalid value
+            example: $description|Invalid value$
