@@ -51,13 +51,13 @@ components:
 
   # requestBodies: $requestBodies$
 
-  #  headers: $ headers$
+  headers: $headers$
 
   securitySchemes: $securitySchemes$
 
   # links: $links$
 
-  #  callbacks: $ callbacks$
+  # callbacks: $callbacks$
 
   # you may use any folder name as placeholder e.g. if you want to define hidden
   # schemas within a x-schemas folder you can use them as well.

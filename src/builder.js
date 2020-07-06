@@ -1,6 +1,6 @@
 const { resolve } = require('path')
 const { loadYaml, loadYamlsAsObj, saveYaml, dirsWithYamlFiles } = require('./yaml.js')
-const { traverse, extractTag, applyMixins } = require('./mixins.js')
+const { traverse, extractTag, applyMixins, isObject } = require('./mixins.js')
 const log = require('debug')('openapi-builder:builder')
 
 class Builder {
@@ -62,6 +62,8 @@ class Builder {
     const schemas = this.buildSchemas()
 
     const fn = obj => {
+      if (!isObject(obj)) return obj
+
       Object.entries(obj).forEach(([key, value]) => {
         const [schemaKey] = extractTag(value)
         if (schemaKey) {

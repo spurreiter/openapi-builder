@@ -7,7 +7,8 @@ describe('utils', function () {
       description: '$description$ Invalid Value',
       nested: {
         number: '$number$ 400'
-      }
+      },
+      array: ['$array0$ one']
     }
 
     it('should use defaults', function () {
@@ -17,7 +18,8 @@ describe('utils', function () {
         description: 'Invalid Value',
         nested: {
           number: 400
-        }
+        },
+        array: ['one']
       })
     })
 
@@ -25,14 +27,16 @@ describe('utils', function () {
       const source = {
         mixin: 400,
         description: 'another value',
-        number: 500
+        number: 500,
+        array0: 'two'
       }
       const r = mixinFn(source, mixin)
       assert.deepStrictEqual(r, {
         description: 'another value',
         nested: {
           number: 500
-        }
+        },
+        array: ['two']
       })
     })
   })

@@ -4,6 +4,8 @@ const jsonClean = obj => JSON.parse(JSON.stringify(obj))
 
 const isNumber = num => !isNaN(Number(num))
 
+const isObject = (obj) => (typeof obj === 'object' && !Array.isArray(obj))
+
 const toNumber = num => isNumber(num) ? Number(num) : num
 
 const RE_TAG = /^\$([a-zA-Z0-9-]+)\$\s*(?:(.*)|)$/
@@ -28,13 +30,13 @@ function traverse (obj, fn) {
   if (obj && Array.isArray(obj)) {
     return obj.map(o => traverse(o, fn))
   } else if (obj && typeof obj === 'object') {
-    const trans = fn(obj)
+    const trans = fn ? fn(obj) : obj
     return Object.keys(trans).reduce((o, key) => {
       o[key] = traverse(trans[key], fn)
       return o
     }, {})
   } else {
-    return obj
+    return fn ? fn(obj) : obj
   }
 }
 
@@ -46,18 +48,30 @@ function traverse (obj, fn) {
  * @return {object}
  */
 function mixinFn (source, mixin, name) {
+  const extractedValue = (value, source) => {
+    const [tag, defaultValue] = extractTag(value)
+    if (tag) {
+      const val = source[tag]
+      return val === undefined
+        ? toNumber(defaultValue)
+        : val
+    } else {
+      return value
+    }
+  }
+
   const fn = obj => {
+    if (Array.isArray(obj)) {
+      return obj
+    }
+
+    if (!isObject(obj)) {
+      return extractedValue(obj, source)
+    }
+
     const target = {}
     Object.entries(obj).forEach(([key, value]) => {
-      if (key[0] !== '$') {
-        const [tag, defaultValue] = extractTag(value)
-        if (tag) {
-          value = source[tag] !== undefined
-            ? source[tag]
-            : toNumber(defaultValue)
-        }
-        target[key] = value
-      }
+      target[key] = extractedValue(value, source)
     })
     return target
   }
@@ -90,6 +104,8 @@ function getMixin (source, mixins) {
  * @return {object}
  */
 function mergeMixins (source, mixins) {
+  if (!isObject(source)) return source
+
   const target = {}
 
   if (source.$mixin) {
@@ -184,5 +200,6 @@ module.exports = {
   extractTag,
   mergeMixins,
   applyMixins,
-  mixinFn
+  mixinFn,
+  isObject
 }

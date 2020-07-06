@@ -1,0 +1,4 @@
+Cache-Control:
+  description: "no-cache, no-store, max-age=0"
+  schema:
+    type: string
