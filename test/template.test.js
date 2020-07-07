@@ -61,6 +61,21 @@ describe('template', function () {
       assert.strictEqual(r, 'bar')
     })
 
+    it('shall return a number if being a default', function () {
+      const r = template('$foo|100$')
+      assert.strictEqual(r, 100)
+    })
+
+    it('shall return a string if default is quoted', function () {
+      const r = template('$foo|"100"$')
+      assert.strictEqual(r, '100')
+    })
+
+    it('shall return a string if being prefixed by a string', function () {
+      const r = template('test $foo|100$')
+      assert.strictEqual(r, 'test 100')
+    })
+
     it('shall replace tag', function () {
       const r = template('$foo$', { foo: 'bar' })
       assert.strictEqual(r, 'bar')

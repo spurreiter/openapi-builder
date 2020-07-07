@@ -5,17 +5,6 @@ const jsonClean = obj => JSON.parse(JSON.stringify(obj))
 
 const isObject = (obj) => (typeof obj === 'object' && !Array.isArray(obj))
 
-const RE_TAG = /^\$([a-zA-Z0-9-]+)\$\s*(?:(.*)|)$/
-
-const extractTag = value => {
-  const m = typeof value === 'string' && RE_TAG.exec(value)
-  if (m && m[1]) {
-    m.shift()
-    return m
-  }
-  return []
-}
-
 /**
  * traverse an object or array
  * if object is detected than `fn` is applied
@@ -46,10 +35,6 @@ function traverse (obj, fn) {
  */
 function mixinFn (source, mixin, name) {
   const fn = obj => {
-    if (Array.isArray(obj)) {
-      return obj
-    }
-
     if (!isObject(obj)) {
       return template(obj, source)
     }
@@ -76,7 +61,9 @@ function getMixin (source, mixins) {
     ? source.mixin
     : source
   if (!mixins[name]) {
-    console.error('missing mixin %s', name)
+    const msg = `Missing mixin "${name}"`
+    console.error('ERROR: %s', msg)
+    return { ERROR: msg }
   } else {
     return mixinFn(source, mixins[name], name)
   }
@@ -182,7 +169,6 @@ function applyMixins (source, { mixins = [], useExtra } = {}) {
 
 module.exports = {
   traverse,
-  extractTag,
   mergeMixins,
   applyMixins,
   mixinFn,

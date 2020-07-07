@@ -1,10 +1,15 @@
 
-const isNumber = num => !isNaN(Number(num))
-
-const toNumber = num => isNumber(num) ? Number(num) : num
+const RE_DIGIT = /[-+]?[0-9.]+/
+const RE_NUM = RegExp(`^${RE_DIGIT.source}$`)
+const RE_QUOTED_NUM = RegExp(`^"(${RE_DIGIT.source})"$`)
 
 const RE_TAG = /\$([a-zA-Z0-9-]+)(?:\|((?:[^\\$]|[\\].)*)|)\$/
-const RE_TAG_ALL = new RegExp(RE_TAG.source, 'g')
+
+const isNumber = num => !isNaN(Number(num)) && RE_NUM.test(num)
+
+const quotedNumber = num => RE_QUOTED_NUM.exec(num)
+
+const toNumber = num => isNumber(num) ? Number(num) : num
 
 const unescape$ = str => typeof str === 'string'
   ? str.replace(/\\\$/g, '$')
@@ -22,14 +27,39 @@ const extractTag = string => {
 
 const template = (string, options = {}) => {
   if (typeof string === 'string') {
-    return toNumber(string.replace(RE_TAG_ALL, (m, tag, defaultValue) => {
-      const value = options[tag]
-      return value !== undefined
-        ? value
-        : defaultValue !== undefined
-          ? unescape$(defaultValue)
-          : `$${tag}$`
-    }))
+    const out = []
+    while (string.length) {
+      const m = RE_TAG.exec(string)
+      if (m) {
+        const [_, tag, defaultValue] = m
+
+        const pre = string.substr(0, m.index)
+        if (pre) out.push(pre)
+
+        string = string.substring(_.length + m.index, string.length)
+
+        const value = options[tag]
+        out.push(value !== undefined
+          ? value
+          : defaultValue !== undefined
+            ? toNumber(unescape$(defaultValue))
+            : `$${tag}$`
+        )
+      } else {
+        // add tail
+        out.push(string)
+        string = ''
+      }
+    }
+    if (out.length === 1) {
+      const val = out[0]
+      return isNumber(val)
+        ? toNumber(val)
+        : quotedNumber(val)
+          ? quotedNumber(val)[1]
+          : val
+    }
+    return out.join('')
   } else {
     return string
   }

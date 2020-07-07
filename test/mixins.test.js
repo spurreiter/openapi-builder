@@ -126,6 +126,19 @@ describe('utils', function () {
       })
     })
 
+    it('shall log missing mixin', function () {
+      const source = {
+        $mixin: 'NotThere'
+      }
+      const fn = source => mergeMixins(source, mixins)
+      const r = traverse(source, fn)
+
+      // console.log(JSON.stringify(r, null, 2))
+      assert.deepStrictEqual(r, {
+        ERROR: 'Missing mixin "NotThere"'
+      })
+    })
+
     describe('mixin as object', function () {
       const mixins = {
         400: {
@@ -238,6 +251,68 @@ describe('utils', function () {
         },
         example: {
           id: '8cc1ca6e-5352-47da-a879-390ec1ada662'
+        }
+      })
+    })
+
+    it('shall apply extra description', function () {
+      const mixins = {
+        Record: {
+          type: 'object',
+          description: 'Some description',
+          $extraDescription: 'and here some additional notes.'
+        }
+      }
+
+      const obj = {
+        Test: {
+          $mixins: ['Record']
+        }
+      }
+
+      const r = applyMixins(obj.Test, { mixins, useExtra: true })
+      // console.log(JSON.stringify(r, null, 2))
+
+      assert.deepStrictEqual(r, {
+        type: 'object',
+        description: 'Some description\nand here some additional notes.'
+      })
+    })
+
+    it('shall collect required attributes', function () {
+      const mixins = {}
+
+      const obj = {
+        properties: {
+          one: {
+            required: true
+          },
+          two: {
+          },
+          three: {
+            required: true
+          }
+        }
+      }
+
+      const r = applyMixins(obj, { mixins })
+      // console.log(JSON.stringify(r, null, 2))
+
+      assert.deepStrictEqual(r, {
+        required: [
+          'one',
+          'three'
+        ],
+        properties: {
+          one: {
+            type: 'string'
+          },
+          two: {
+            type: 'string'
+          },
+          three: {
+            type: 'string'
+          }
         }
       })
     })

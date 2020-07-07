@@ -1,14 +1,15 @@
 const { resolve } = require('path')
 const { loadYaml, loadYamlsAsObj, saveYaml, dirsWithYamlFiles } = require('./yaml.js')
-const { traverse, extractTag, applyMixins, isObject } = require('./mixins.js')
+const { traverse, applyMixins, isObject } = require('./mixins.js')
+const { extractTag } = require('./template.js')
 const log = require('debug')('openapi-builder:builder')
 
 class Builder {
   constructor ({
     dirname = process.cwd(),
     mainfile = 'main.yaml',
-    outfile = 'api.yaml',
-    mixinDirnames = ['mixins', 'responses'],
+    outfile,
+    mixinDirnames = ['mixins'],
     useExtra
   } = {}) {
     this.options = {
@@ -70,7 +71,9 @@ class Builder {
           log('schemaKey %s found', schemaKey)
           const schema = schemas[schemaKey]
           if (!schema) {
-            console.error('no yaml objects in "%s" found', schemaKey)
+            const msg = `No yaml objects in "${schemaKey}" found`
+            console.error('ERROR: %s', msg)
+            obj[key] = { ERROR: msg }
           } else {
             obj[key] = schema
           }
@@ -80,8 +83,8 @@ class Builder {
     }
 
     const data = traverse(main, fn)
-
-    saveYaml(outfile, data)
+    if (outfile) saveYaml(outfile, data)
+    return data
   }
 }
 
@@ -89,4 +92,7 @@ function builder (opts) {
   return new Builder(opts).init().build()
 }
 
-module.exports = builder
+module.exports = {
+  builder,
+  Builder
+}
