@@ -1,5 +1,6 @@
 const path = require('path')
 const fs = require('fs')
+const { template } = require('./template.js')
 const log = require('debug')('openapi-builder:cli')
 
 const CONFIG_FILE = '.openapi-builder.json'
@@ -13,12 +14,27 @@ const CONFIG = {
 
 const loadJson = (filename) => JSON.parse(fs.readFileSync(filename, 'utf8'))
 
-const saveJson = (filename, data, isForce) => {
+const saveJson = (filename, data, force) => {
   try {
-    if (isForce) throw new Error()
+    if (force) throw new Error()
     fs.statSync(filename)
   } catch (e) {
     fs.writeFileSync(filename, JSON.stringify(data, null, 2), 'utf8')
+  }
+}
+
+const saveView = ({ config, configFile, force }) => {
+  const { dirname, outfile: _outfile } = config
+  const outfile = path.relative(dirname, _outfile)
+
+  const view = fs.readFileSync(`${__dirname}/view.html`, 'utf8')
+  const html = template(view, { outfile })
+  const filename = path.resolve(dirname, 'index.html')
+  try {
+    if (force) throw new Error()
+    fs.statSync(filename)
+  } catch (e) {
+    fs.writeFileSync(filename, html, 'utf8')
   }
 }
 
@@ -32,13 +48,16 @@ const toConfigfile = filename => {
     if (!/\.json$/.test(filename) || stat.isDirectory()) {
       return path.resolve(dirname, CONFIG_FILE)
     }
-
-    return filename
   } catch (e) {}
+  return filename
 }
 
 const loadConfig = (filename) => {
-  const config = loadJson(filename)
+  let config = CONFIG
+  try {
+    config = loadJson(filename)
+  } catch (e) {}
+
   const dirname = path.dirname(filename)
 
   ;['dirname', 'mainfile', 'outfile'].forEach(key => {
@@ -60,7 +79,8 @@ const help = () => console.log(`
 
 function cli (argv) {
   const cmd = {
-    configFile: toConfigfile(path.resolve(process.cwd(), CONFIG_FILE))
+    configFile: toConfigfile(path.resolve(process.cwd(), CONFIG_FILE)),
+    config: CONFIG
   }
 
   while (argv.length) {
@@ -95,14 +115,14 @@ function cli (argv) {
     help()
     process.exit(0)
   }
-  if (cmd.init) {
-    saveJson(cmd.configFile, cmd.config, cmd.force)
-    process.exit(0)
-  }
   if (cmd.configFile) {
     cmd.config = loadConfig(cmd.configFile)
   }
-
+  if (cmd.init) {
+    saveJson(cmd.configFile, cmd.config, cmd.force)
+    saveView(cmd)
+    process.exit(0)
+  }
   return cmd
 }
 
