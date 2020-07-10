@@ -21,6 +21,8 @@ function traverse (obj, fn) {
       o[key] = traverse(trans[key], fn)
       return o
     }, {})
+  } else if (obj === null || obj === undefined) {
+    return obj
   } else {
     return fn ? fn(obj) : obj
   }

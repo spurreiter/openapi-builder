@@ -316,5 +316,52 @@ describe('utils', function () {
         }
       })
     })
+
+    it('shall not fail on null in example', function () {
+      const mixins = {}
+
+      const obj = {
+        properties: {
+          one: {
+            required: true
+          },
+          two: {},
+          three: {
+            required: true
+          }
+        },
+        example: {
+          one: 'one',
+          two: null,
+          three: '3'
+        }
+      }
+
+      const r = applyMixins(obj, { mixins })
+      // console.log(JSON.stringify(r, null, 2))
+
+      assert.deepStrictEqual(r, {
+        required: [
+          'one',
+          'three'
+        ],
+        properties: {
+          one: {
+            type: 'string'
+          },
+          two: {
+            type: 'string'
+          },
+          three: {
+            type: 'string'
+          }
+        },
+        example: {
+          one: 'one',
+          two: null,
+          three: '3'
+        }
+      })
+    })
   })
 })
