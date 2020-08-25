@@ -131,7 +131,7 @@ function properties (target, useExtra) {
 
       extras(value, useExtra)
 
-      let { type, format, description, example, required, ...other } = value
+      const { type, format, description, example, required, ...other } = value
 
       if (example) {
         if (!target.example) target.example = {}
@@ -142,10 +142,6 @@ function properties (target, useExtra) {
         if (!target.required) target.required = []
         target.required.push(key)
         target.required = Array.from(new Set(target.required))
-      }
-
-      if (!value.$ref) {
-        type = type || 'string'
       }
 
       target.properties[key] = jsonClean({

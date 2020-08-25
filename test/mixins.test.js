@@ -220,6 +220,7 @@ describe('utils', function () {
           type: 'object',
           properties: {
             testId: {
+              type: 'string',
               description: 'test UUID'
             }
           }
@@ -231,8 +232,12 @@ describe('utils', function () {
           $mixins: ['Record', 'Test'],
           type: 'object',
           properties: {
-            id: { example: '8cc1ca6e-5352-47da-a879-390ec1ada662' },
+            id: {
+              type: 'string',
+              example: '8cc1ca6e-5352-47da-a879-390ec1ada662'
+            },
             orgId: {
+              type: 'string'
             }
           }
         }
@@ -285,11 +290,14 @@ describe('utils', function () {
       const obj = {
         properties: {
           one: {
+            type: 'string',
             required: true
           },
           two: {
+            type: 'string'
           },
           three: {
+            type: 'string',
             required: true
           }
         }
@@ -323,10 +331,14 @@ describe('utils', function () {
       const obj = {
         properties: {
           one: {
+            type: 'string',
             required: true
           },
-          two: {},
+          two: {
+            type: 'string'
+          },
           three: {
+            type: 'string',
             required: true
           }
         },
@@ -379,6 +391,7 @@ describe('utils', function () {
             },
             object: '$object$',
             foo: {
+              type: 'string',
               default: 'This $foo$ shall be shown'
             }
           },
