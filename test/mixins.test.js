@@ -378,12 +378,16 @@ describe('utils', function () {
               default: '$_number|0$'
             },
             object: '$object$',
-            // if undefined in source then key shall not be rendered.
-            other: '$other|undefined$',
             foo: {
               default: 'This $foo$ shall be shown'
             }
-          }
+          },
+          defUndefined: '$other|undefined$',
+          defNull: '$other|null$',
+          defEmptyObj: '$other|{}$',
+          defEmptyArr: '$other|[]$',
+          defObj: '$other|{"a":1,"b":"B"}$',
+          defArr: '$other|[1,"2","C"]$'
         }
       }
 
@@ -435,7 +439,13 @@ describe('utils', function () {
               }
             }
           }
-        }
+        },
+        defUndefined: undefined,
+        defNull: null,
+        defEmptyObj: {},
+        defEmptyArr: [],
+        defObj: { a: 1, b: 'B' },
+        defArr: [1, 2, 'C']
       })
     })
   })

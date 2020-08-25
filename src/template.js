@@ -15,6 +15,27 @@ const unescape$ = str => typeof str === 'string'
   ? str.replace(/\\\$/g, '$')
   : str
 
+const parseJson = (value) => {
+  if (typeof value === 'string' && /^\s*[[{].*[}\]]\s*$/m.test(value)) {
+    try {
+      return JSON.parse(value)
+    } catch (e) {}
+  }
+}
+
+const mapDefaultValue = (defaultValue, tag) => {
+  switch (defaultValue) {
+    case 'undefined':
+      return undefined
+    case 'null':
+      return null
+    default:
+      return defaultValue !== undefined
+        ? parseJson(defaultValue) || toNumber(unescape$(defaultValue))
+        : `$${tag}$`
+  }
+}
+
 const extractTag = string => {
   const m = typeof string === 'string' && RE_TAG.exec(string)
   if (m && m[1]) {
@@ -41,11 +62,7 @@ const template = (string, options = {}) => {
 
         out.push(value !== undefined
           ? value
-          : defaultValue === 'undefined'
-            ? undefined
-            : defaultValue !== undefined
-              ? toNumber(unescape$(defaultValue))
-              : `$${tag}$`
+          : mapDefaultValue(defaultValue, tag)
         )
       } else {
         // add tail
