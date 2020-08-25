@@ -83,6 +83,7 @@ class Builder {
     }
 
     const data = traverse(main, fn)
+    // console.log(require('util').inspect(data, { depth: Infinity }))
     if (outfile) saveYaml(outfile, data)
     return data
   }

@@ -17,6 +17,7 @@ ErrorResponse:
           message:
             type: string
             example: $description|Invalid value$
+          other: $other|undefined$
     application/json:
       schema:
         type: object

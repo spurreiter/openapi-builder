@@ -3,7 +3,7 @@ const RE_DIGIT = /[-+]?[0-9.]+/
 const RE_NUM = RegExp(`^${RE_DIGIT.source}$`)
 const RE_QUOTED_NUM = RegExp(`^"(${RE_DIGIT.source})"$`)
 
-const RE_TAG = /\$([a-zA-Z0-9-]+)(?:\|((?:[^\\$]|[\\].)*)|)\$/
+const RE_TAG = /\$([_a-zA-Z0-9-]+)(?:\|((?:[^\\$]|[\\].)*)|)\$/
 
 const isNumber = num => !isNaN(Number(num)) && RE_NUM.test(num)
 
@@ -37,13 +37,15 @@ const template = (string, options = {}) => {
         if (pre) out.push(pre)
 
         string = string.substring(_.length + m.index, string.length)
-
         const value = options[tag]
+
         out.push(value !== undefined
           ? value
-          : defaultValue !== undefined
-            ? toNumber(unescape$(defaultValue))
-            : `$${tag}$`
+          : defaultValue === 'undefined'
+            ? undefined
+            : defaultValue !== undefined
+              ? toNumber(unescape$(defaultValue))
+              : `$${tag}$`
         )
       } else {
         // add tail

@@ -123,30 +123,37 @@ function extras (target, useExtra) {
 }
 
 function properties (target, useExtra) {
-  Object.entries(target.properties || {}).forEach(([key, value]) => {
-    extras(value, useExtra)
+  if (target.properties) {
+    Object.entries(target.properties).forEach(([key, value]) => {
+      if (value === undefined) {
+        return
+      }
 
-    let { type, format, description, example, required, ...other } = value
+      extras(value, useExtra)
 
-    if (example) {
-      if (!target.example) target.example = {}
-      target.example[key] = example
-    }
+      let { type, format, description, example, required, ...other } = value
 
-    if (required) {
-      if (!target.required) target.required = []
-      target.required.push(key)
-      target.required = Array.from(new Set(target.required))
-    }
+      if (example) {
+        if (!target.example) target.example = {}
+        target.example[key] = example
+      }
 
-    if (!value.$ref) {
-      type = type || 'string'
-    }
+      if (required) {
+        if (!target.required) target.required = []
+        target.required.push(key)
+        target.required = Array.from(new Set(target.required))
+      }
 
-    target.properties[key] = jsonClean({
-      type, format, ...other, description
+      if (!value.$ref) {
+        type = type || 'string'
+      }
+
+      target.properties[key] = jsonClean({
+        type, format, ...other, description
+      })
     })
-  })
+    target.properties = jsonClean(target.properties)
+  }
 }
 
 /**

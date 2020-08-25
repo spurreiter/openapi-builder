@@ -363,5 +363,80 @@ describe('utils', function () {
         }
       })
     })
+
+    it('shall apply templates to mixin', function () {
+      const mixins = {
+        Test: {
+          type: 'object',
+          properties: {
+            string: {
+              type: 'string',
+              default: '$_string$'
+            },
+            number: {
+              type: 'number',
+              default: '$_number|0$'
+            },
+            object: '$object$',
+            // if undefined in source then key shall not be rendered.
+            other: '$other|undefined$',
+            foo: {
+              default: 'This $foo$ shall be shown'
+            }
+          }
+        }
+      }
+
+      const source = {
+        $mixin: {
+          mixin: 'Test',
+          _string: 'string',
+          _number: '200',
+          object: {
+            type: 'object',
+            properties: {
+              array: {
+                type: 'array',
+                items: {
+                  type: 'string'
+                }
+              }
+            }
+          }
+        }
+      }
+
+      const r = applyMixins(source, { mixins })
+      // console.log(JSON.stringify(r, null, 2))
+
+      assert.deepStrictEqual(r, {
+        type: 'object',
+        properties: {
+          string: {
+            type: 'string',
+            default: 'string'
+          },
+          number: {
+            type: 'number',
+            default: 200
+          },
+          foo: {
+            default: 'This $foo$ shall be shown',
+            type: 'string'
+          },
+          object: {
+            type: 'object',
+            properties: {
+              array: {
+                type: 'array',
+                items: {
+                  type: 'string'
+                }
+              }
+            }
+          }
+        }
+      })
+    })
   })
 })
