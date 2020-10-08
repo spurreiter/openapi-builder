@@ -1,6 +1,6 @@
 {
   "name": "openapi-builder",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "builder for openapi files",
   "keywords": [
     "openapi",
