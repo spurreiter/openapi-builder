@@ -1,11 +1,12 @@
 const assert = require('assert')
+const path = require('path')
 const { builder, Builder } = require('..')
 const { loadYaml } = require('../src/yaml.js')
 
 describe('builder', function () {
   it('shall build example', function () {
     const data = builder({
-      dirname: `${__dirname}/../example`,
+      dirname: path.resolve(__dirname, '../example'),
       mainfile: 'main.yaml',
       mixinDirnames: ['mixins']
     })
@@ -20,7 +21,7 @@ describe('builder', function () {
       'tags'
     ])
 
-    const exp = loadYaml(`${__dirname}/../example/petstore.yaml`)
+    const exp = loadYaml(path.resolve(__dirname, '../example/petstore.yaml'))
     assert.deepStrictEqual(data, exp)
   })
 

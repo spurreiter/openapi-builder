@@ -27,7 +27,7 @@ const saveView = ({ config, configFile, force }) => {
   const { dirname, outfile: _outfile } = config
   const outfile = path.relative(dirname, _outfile)
 
-  const view = fs.readFileSync(`${__dirname}/view.html`, 'utf8')
+  const view = fs.readFileSync(path.resolve(__dirname, 'view.html'), 'utf8')
   const html = template(view, { outfile })
   const filename = path.resolve(dirname, 'index.html')
   try {

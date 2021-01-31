@@ -7,7 +7,7 @@ function yamlFiles (dirname) {
 }
 
 function loadYaml (filename) {
-  return yaml.safeLoad(fs.readFileSync(filename, 'utf8'))
+  return yaml.load(fs.readFileSync(filename, 'utf8'))
 }
 
 function loadYamls (dirname) {
@@ -38,7 +38,7 @@ function loadYamlsAsObj (dirname) {
 }
 
 function saveYaml (filename, data) {
-  fs.writeFileSync(filename, yaml.safeDump(data), 'utf-8')
+  fs.writeFileSync(filename, yaml.dump(data), 'utf-8')
 }
 
 module.exports = {
